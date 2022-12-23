@@ -68,11 +68,12 @@ button {
   background: #535bf2;
   width: 100px;
   height: 100%;
+  transition: 0.6s;
 }
 label {
   margin-bottom: 5px;
 }
-input:not([type='radio']),
+input:not([type="radio"]),
 select {
   height: 40px;
   width: 100%;

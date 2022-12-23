@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 /*
 * CHALLENGE progresso do formulário
 
@@ -36,42 +38,129 @@ do formulário e zerar a barra de progresso novamente.
 */
 
 function App() {
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState("");
+  const [isMale, setIsMale] = useState(false);
+  const [isFemale, setIsFemale] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    if (!isFemale === false) {
+      return;
+    }
+    setIsFemale(false);
+  }, [isMale]);
+
+  useEffect(() => {
+    if (isMale === false) {
+      return;
+    }
+    setIsMale(false);
+  }, [isFemale]);
+  useEffect(() => {
+    fullValidate();
+  }, [fullName, email, status, isMale, isFemale]);
+
+  const fullValidate = () => {
+    var currentProgress = 0;
+    if (validateFullName()) {
+      currentProgress += 25;
+    }
+    if (validateEmail()) {
+      currentProgress += 25;
+    }
+    if (validateStatus()) {
+      currentProgress += 25;
+    }
+    if (isMale || isFemale) {
+      currentProgress += 25;
+    }
+    setProgress(currentProgress);
+  };
+  const validateFullName = () => {
+    return fullName.includes(" ");
+  };
+  const validateEmail = () => {
+    return /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+      email
+    );
+  };
+  const validateStatus = () => {
+    return status !== "";
+  };
+  const sendForm = () => {
+    alert("Form Enviado!");
+  };
+  console.log(`m:${isMale} e f:${isFemale}`);
   return (
-    <div className='App'>
+    <div className="App">
       <h3>desafio fernandev</h3>
       <h1>progresso do formulário</h1>
 
       <main>
-        {/* crie a barra de progresso aqui */}
-        <div className='form-group'>
-          <label htmlFor=''>Nome Completo</label>
-          <input />
+        <div className="bar-container">
+          <div className="bar" style={{ width: `${progress}%` }}></div>
         </div>
-        <div className='form-group'>
-          <label htmlFor=''>E-mail</label>
-          <input />
+        <div className="form-group">
+          <label htmlFor="">Nome Completo</label>
+          <input
+            value={fullName}
+            onChange={(e) => {
+              setFullName(e.target.value);
+            }}
+          />
         </div>
-        <div className='form-group'>
-          <label htmlFor=''>Estado Civil</label>
-          <select>
-            <option value=''>- selecione...</option>
-            <option value='solteiro'>Solteiro</option>
-            <option value='casado'>Casado</option>
-            <option value='divorciado'>Divorciado</option>
+        <div className="form-group">
+          <label htmlFor="">E-mail</label>
+          <input
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="">Estado Civil</label>
+          <select
+            onChange={(e) => {
+              setStatus(e.target.value);
+            }}
+          >
+            <option value="">- selecione...</option>
+            <option value="solteiro">Solteiro</option>
+            <option value="casado">Casado</option>
+            <option value="divorciado">Divorciado</option>
           </select>
         </div>
-        <div className='form-group'>
-          <label htmlFor=''>Gênero</label>
-          <div className='radios-container'>
+        <div className="form-group">
+          <label htmlFor="">Gênero</label>
+          <div className="radios-container">
             <span>
-              <input type='radio' /> Masculino
+              <input
+                onChange={(e) => {
+                  setIsMale(e.target.checked);
+                }}
+                name="genre"
+                type="radio"
+              />{" "}
+              Masculino
             </span>
             <span>
-              <input type='radio' /> Feminino
+              <input
+                onChange={(e) => {
+                  setIsFemale(e.target.checked);
+                }}
+                name="genre"
+                type="radio"
+              />{" "}
+              Feminino
             </span>
           </div>
         </div>
-        <button>Enviar Formulário</button>
+        <button disabled={progress !== 100} onClick={sendForm}>
+          Enviar Formulário
+        </button>
       </main>
     </div>
   );
