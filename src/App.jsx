@@ -79,7 +79,11 @@ function App() {
     setProgress(currentProgress);
   };
   const validateFullName = () => {
-    return fullName.includes(" ");
+    const listName = fullName.split(" ");
+    if (!listName[1]) {
+      return false;
+    }
+    return true;
   };
   const validateEmail = () => {
     return /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
@@ -92,7 +96,6 @@ function App() {
   const sendForm = () => {
     alert("Form Enviado!");
   };
-  console.log(`m:${isMale} e f:${isFemale}`);
   return (
     <div className="App">
       <h3>desafio fernandev</h3>
